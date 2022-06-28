@@ -1,8 +1,4 @@
-import math
-import queue
-from tkinter.messagebox import QUESTION
-from urllib import response
-from secret import *
+from secret
 from discord.ext import commands
 import discord
 import random
@@ -49,10 +45,10 @@ async def on_message(message):
             await message.channel.send("c'est ça !")
             juste_prix = -1
     if message.content.lower() == "-quizz":
-        quiz = random.randint(0, len(reponse) - 1)
-        await message.channel.send(question[quiz])
+        quiz = random.randint(0, len(quizz.reponse) - 1)
+        await message.channel.send(quizz.question[quiz])
     if (quiz != -1):
-        if message.content.lower() in reponse[quiz]:
+        if message.content.lower() in quizz.reponse[quiz]:
             await message.channel.send(f"@{message.author} Bravo tu as trouvé la réponse")
             quiz = -1
-client.run(secret)
+client.run(secret.secret)
