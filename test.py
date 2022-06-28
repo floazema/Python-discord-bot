@@ -28,7 +28,7 @@ async def on_message(message):
         await message.channel.send("demerde toi fdp")
     if message.content.lower() == "-ratio":
         if (message.reference) :
-            refMsg = await message.fetch_message(message.reference.message_id)
+            refMsg = await discord.abc.Messageable.fetch_message(message.reference.message_id)
             await RatioMsg(refMsg)
         else :
             cnt = 0
