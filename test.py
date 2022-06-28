@@ -9,6 +9,13 @@ import discord
 bot = commands.Bot(command_prefix='+')
 client = discord.Client()
 
+async def RatioMsg(message) :
+    await last_msg.add_reaction("🇷")
+    await last_msg.add_reaction("🇦")
+    await last_msg.add_reaction("🇹")
+    await last_msg.add_reaction("🇮")
+    await last_msg.add_reaction("🇴")
+
 @client.event
 async def on_ready():
     print("JE SUIS PRET")
@@ -21,7 +28,8 @@ async def on_message(message):
         await message.channel.send("demerde toi fdp")
     if message.content.lower() == "-ratio":
         if (message.reference) :
-            message.reference.add_reaction("🇷")
+            refMsg = await message.fetch_message(message.reference.message_id)
+            await RatioMsg(refMsg)
         else :
             cnt = 0
             last_msg = ""
@@ -30,9 +38,5 @@ async def on_message(message):
                     cnt += 1
                     continue
                 await message.delete()
-                await last_msg.add_reaction("🇷")
-                await last_msg.add_reaction("🇦")
-                await last_msg.add_reaction("🇹")
-                await last_msg.add_reaction("🇮")
-                await last_msg.add_reaction("🇴")             
+            await RatioMsg(last_msg)
 client.run(secret)
