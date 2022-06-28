@@ -1,4 +1,4 @@
-from secret
+import secret
 from discord.ext import commands
 import discord
 import random
