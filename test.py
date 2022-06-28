@@ -14,7 +14,7 @@ async def on_ready():
     print("JE SUIS PRET")
 
 @client.event
-async def on_message(message):
+async def on_message(message: discord.Message):
     global juste_prix
     global quiz
     if message.content.lower() == "-help":
@@ -49,6 +49,6 @@ async def on_message(message):
         await message.channel.send(quizz.question[quiz])
     if (quiz != -1):
         if message.content.lower() in quizz.reponse[quiz]:
-            await message.channel.send(f"@{message.author} Bravo tu as trouvé la réponse")
+            await message.channel.send(f"{message.author.mention} Bravo tu as trouvé la réponse")
             quiz = -1
 client.run(secret.secret)
