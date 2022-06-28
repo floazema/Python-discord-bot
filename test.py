@@ -1,11 +1,17 @@
+import math
+import queue
+from tkinter.messagebox import QUESTION
+from urllib import response
 from secret import *
 from discord.ext import commands
 import discord
 import random
+import quizz
 
 bot = commands.Bot(command_prefix='+')
 client = discord.Client()
 juste_prix = -1
+quiz = -1
 
 @client.event
 async def on_ready():
@@ -14,6 +20,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global juste_prix
+    global quiz
     if message.content.lower() == "-help":
         await message.channel.send("-ratio: ratio someone\n -alea: joue au juste prix\n-alea stop: stop alea game")
     if message.content.lower() == "-ratio":
@@ -41,4 +48,11 @@ async def on_message(message):
         if int(message.content) == juste_prix:
             await message.channel.send("c'est ça !")
             juste_prix = -1
+    if message.content.lower() == "-quizz":
+        quiz = random.randint(0, len(reponse) - 1)
+        await message.channel.send(question[quiz])
+    if (quiz != -1):
+        if message.content.lower() in reponse[quiz]:
+            await message.channel.send(f"@{message.author} Bravo tu as trouvé la réponse")
+            quiz = -1
 client.run(secret)
