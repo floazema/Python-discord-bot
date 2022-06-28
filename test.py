@@ -33,7 +33,9 @@ async def ratio(ctx: commands.Context):
 
 @bot.command()
 async def alea(ctx: commands.Context, stop=""):
-    """Pick a random number between 0 and 1000, i will tell to the next message if they are close to it"""
+    """Pick a random number between 0 and 1000, i will tell to the next message if they are close to it.
+    if you specify any argument after this command, it will stop the alea
+    """
     global juste_prix
     if stop != "":
         juste_prix = -1
