@@ -10,11 +10,11 @@ bot = commands.Bot(command_prefix='+')
 client = discord.Client()
 
 async def RatioMsg(message) :
-    await last_msg.add_reaction("🇷")
-    await last_msg.add_reaction("🇦")
-    await last_msg.add_reaction("🇹")
-    await last_msg.add_reaction("🇮")
-    await last_msg.add_reaction("🇴")
+    await message.add_reaction("🇷")
+    await message.add_reaction("🇦")
+    await message.add_reaction("🇹")
+    await message.add_reaction("🇮")
+    await message.add_reaction("🇴")
 
 @client.event
 async def on_ready():
