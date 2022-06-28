@@ -1,13 +1,11 @@
-from email.message import Message
-from itertools import count
 from secret import *
-from multiprocessing.connection import wait
-from pydoc import cli
 from discord.ext import commands
 import discord
+import random
 
 bot = commands.Bot(command_prefix='+')
 client = discord.Client()
+juste_prix = -1
 
 @client.event
 async def on_ready():
@@ -15,24 +13,32 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.lower() == "-free nitro":
-        await message.channel.send("<https://www.youtube.com/watch?v=dQw4w9WgXcQ>")
+    global juste_prix
     if message.content.lower() == "-help":
-        await message.channel.send("demerde toi fdp")
+        await message.channel.send("-ratio: ratio someone\n -alea: joue au juste prix\n-alea stop: stop alea game")
     if message.content.lower() == "-ratio":
-        if (message.reference) :
-            message.reference.add_reaction("🇷")
-        else :
-            cnt = 0
-            last_msg = ""
-            async for last_msg in message.channel.history(limit=2):
-                if (cnt == 0):
-                    cnt += 1
-                    continue
-                await message.delete()
-                await last_msg.add_reaction("🇷")
-                await last_msg.add_reaction("🇦")
-                await last_msg.add_reaction("🇹")
-                await last_msg.add_reaction("🇮")
-                await last_msg.add_reaction("🇴")             
+        cnt = 0
+        last_msg = ""
+        async for last_msg in message.channel.history(limit=2):
+            if (cnt == 0):
+                cnt += 1
+                continue
+            await message.delete()
+            await last_msg.add_reaction("🇷")
+            await last_msg.add_reaction("🇦")
+            await last_msg.add_reaction("🇹")
+            await last_msg.add_reaction("🇮")
+            await last_msg.add_reaction("🇴")
+    if message.content.lower() == "-alea":
+        juste_prix = random.randint(0, 1000)
+    if message.content.lower() == "-alea stop":
+        juste_prix = -1
+    if (juste_prix != -1):
+        if int(message.content) < juste_prix:
+            await message.channel.send("plus haut")
+        if int(message.content) > juste_prix:
+            await message.channel.send("plus bas")
+        if int(message.content) == juste_prix:
+            await message.channel.send("c'est ça !")
+            juste_prix = -1
 client.run(secret)
