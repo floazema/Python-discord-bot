@@ -32,7 +32,7 @@ quizz_data = {
     "Quel est le langage informatique le plus utilisé au monde en 2022 ?":
         ["java", "le java"],
     "Complétez l'expression :Mettre du beurre dans les...":
-        ["epindards", "épinards"],
+        ["epinards", "épinards"],
     "Comment appelle-t-on l'explosion qui serait à l'origine de l'expansion de l'Univers ?":
         ["le big bang", "big bang"],
     "Comment s'appelle l'ami lapin de Bambi ?":
@@ -41,6 +41,52 @@ quizz_data = {
         ["bonjour"],
     "Dans quelle articulation du corps humain se situe la rotule ?":
         ["le genou", "genou"],
+    "Mais, ou, et, donc, or, ni, car sont des conjonctions de...":
+        ["coordination"],
+    "Dans la série des Gendarmes, quel est le nom de famille du personnage de Louis de Funès ?":
+        ["cruchot"],
+    "Dans la série d'animation Dora l'exploratrice, quel est le prénom de son ami le singe ?":
+        ["babouche"],
+    "D'après la chanson, quel vêtement le bon roi Dagobert a-t-il mis à l'envers ?":
+        ["culotte", "sa culotte"],
+    "Comment se prénomme l'épouse du président Barack Obama ?":
+        ["michelle"],
+    "Comment appelle-t-on le fruit du chêne ?":
+        ["gland", "le gland"],
+    "Combien y a-t-il de millimètres dans 5 centimètres ?":
+        ["50"],
+    "A combien de jours équivalent 408 heures ?":
+        ["17"],
+    "Comment s'appelle le petit robot, héros du film d'animation des studios Disney-Pixar, sorti en 2008 ?":
+        ["wall-e", "walle"],
+    "Au cours de quel mois l'été se termine-t-il en France ?":
+        ["septembre"],
+    "Dans quel pays est né le footballeur Diego Maradona ?":
+        ["argentine"],
+    "Dans quel État des États-Unis se trouve la ville de Malibu ?":
+        ["californie"],
+    "Dans la version des ""Trois petits cochons"" de Walt Disney, de quel matériau est faite la maison du premier petit cochon ?":
+        ["en paille", "paille"],
+    "Dans la Bible, comment se prénomme l'homme qui mangea le fruit défendu ":
+        ["adam"],
+    "Comment appelle-t-on les habitants de Madagascar ?":
+        ["les malgaches", "malgache", "malgaches"],
+    "A quel groupe de rock doit-on ""We Are The Champions"" ?":
+        ["queen"],
+    "Dans les bras de quel dieu grec se retrouve-t-on en s'endormant ?":
+        ["morphée", "morphé", "morphee", "morphee"],
+    "Quel os de la cuisse est le plus long de tous les os du corps humain ?":
+        ["fémur", "femur", "le femur", "le fémur"],
+    "Sous quel autre nom connaît-on mieux le chlorure de sodium ?":
+        ["le sel", "sel"],
+    "Dans quelle ville des États-Unis, peut-on emprunter le pont du Golden Gate ?":
+        ["san francisco"],
+    "Dans quel sport peut-on effectuer un 18 trous ?":
+        ["golf", "le golf"],
+    "Sous quel autre nom connaît-on la ""licorne de mer"" ?":
+        ["le narval", "narval"],
+    "Traditionnellement, quel fromage est employé dans la recette de la tartiflette ?":
+        ["le roblochon", "roblochon"],
 }
 
 question = [str(x) for x in quizz_data.keys()]

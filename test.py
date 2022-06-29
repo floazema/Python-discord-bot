@@ -21,10 +21,7 @@ async def ratio(ctx: commands.Context):
     if message == None:
         return
     await message.delete()
-    async for last_msg in ctx.history(limit=2):
-        if (cnt == 0):
-            cnt += 1
-            continue
+    async for last_msg in ctx.history(limit=1):
         await last_msg.add_reaction("🇷")
         await last_msg.add_reaction("🇦")
         await last_msg.add_reaction("🇹")
@@ -75,5 +72,4 @@ async def on_message_i_think(message: discord.Message):
         if message.content.lower() in quizz_data.reponse[quiz]:
             await message.channel.send(f"{message.author.mention} Bravo tu as trouvé la réponse")
             quiz = -1
-
 bot.run(secret.secret)
