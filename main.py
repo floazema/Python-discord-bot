@@ -8,14 +8,11 @@ import data as pendu_data
 intents=discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="+", intents=intents)
-juste_prix = -1
-quiz = -1
-is_pendu = -1
 
 @bot.event
 async def on_ready():
     print("JE SUIS PRET")
-     
+
 
 #      ██╗██╗   ██╗███████╗████████╗███████╗    ██████╗ ██████╗ ██╗██╗  ██╗
 #      ██║██║   ██║██╔════╝╚══██╔══╝██╔════╝    ██╔══██╗██╔══██╗██║╚██╗██╔╝
@@ -23,7 +20,9 @@ async def on_ready():
 # ██   ██║██║   ██║╚════██║   ██║   ██╔══╝      ██╔═══╝ ██╔══██╗██║ ██╔██╗ 
 # ╚█████╔╝╚██████╔╝███████║   ██║   ███████╗    ██║     ██║  ██║██║██╔╝ ██╗
 #  ╚════╝  ╚═════╝ ╚══════╝   ╚═╝   ╚══════╝    ╚═╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝
-                                                                         
+                            
+juste_prix = -1
+
 @bot.command()
 async def alea(ctx: commands.Context, stop=""):
     """Pick a random number between 0 and 1000, i will tell to the next message if they are close to it.
@@ -54,16 +53,18 @@ async def wait_message_juste_prix(message: discord.Message):
 # ██║     ███████╗██║ ╚████║██████╔╝╚██████╔╝
 # ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ 
 
+is_pendu = -1
+tentative = 7
 
 def replace_char(string: str, char: str, index: int):
     return string[:index] + char + string[index + 1:]
 
 @bot.command()
 async def pendu(ctx: commands.Context):
-    """Pendu :D"""
     global pendu_word
     global is_pendu
     global words
+    tentative = 8
     pendu_word = pendu_data.pendu_data[random.randint(0, len(pendu_data.pendu_data) - 1)]
     words="_"*len(pendu_word)
     words = pendu_word[0] + words[1:]
@@ -73,25 +74,35 @@ async def pendu(ctx: commands.Context):
     for i in range(len(pendu_word)):
         if (words[0] == pendu_word[i]):
             words = replace_char(words, pendu_word[i], i)
-    await ctx.send(f"`{words}`")
 
 @bot.listen('on_message')
 async def wait_message_pendu(message: discord.Message):
-
-
+    if (message.author.id == 991271491809316865):
+        return
     global words
     global pendu_word
     global is_pendu
-    if (is_pendu != -1 and len(message.content) == 1):
-        a = 0
+    global tentative
+    if (is_pendu != -1):
+        is_win = 0
+        is_correct = 0
         for i in range(len(pendu_word)):
             if (message.content.lower() == pendu_word[i].lower()):
                 words = replace_char(words, pendu_word[i], i)
+                is_correct = 1
             if (words[i] == "_"):
-                a = 1
-        await message.channel.send(f"`{words}`")
-        if a == 0:
-            await message.channel.send(f"`Bien jouer le mot était bien : {words}` !")
+                is_win = 1
+        if is_correct == 0:
+            tentative -= 1
+        await message.channel.send(f"`{words}      tentative restantes : {tentative} !`")
+        if is_win == 0:
+            await message.channel.send(f"`Bien jouer le mot était bien : {words}` ")
+            tentative = 8
+            is_pendu = -1
+        if tentative == 0:
+            await message.channel.send(f"`Perdu, le mot était : {words} !`")
+            tentative = 8
+            is_pendu = -1
 
 #  ██████╗ ██╗   ██╗██╗███████╗███████╗
 # ██╔═══██╗██║   ██║██║╚══███╔╝╚══███╔╝
@@ -99,6 +110,8 @@ async def wait_message_pendu(message: discord.Message):
 # ██║▄▄ ██║██║   ██║██║ ███╔╝   ███╔╝  
 # ╚██████╔╝╚██████╔╝██║███████╗███████╗
 #  ╚══▀▀═╝  ╚═════╝ ╚═╝╚══════╝╚══════╝
+
+quiz = -1
 
 @bot.command()
 async def quizz(ctx: commands.Context):
