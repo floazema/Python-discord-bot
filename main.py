@@ -11,8 +11,9 @@ bot = commands.Bot(command_prefix="+", intents=intents)
 
 @bot.event
 async def on_ready():
-    print("JE SUIS PRET")
-
+    print("o==================================================================o")
+    print("|                         JE SUIS PRET                             |")
+    print("o==================================================================o")
 
 #      ██╗██╗   ██╗███████╗████████╗███████╗    ██████╗ ██████╗ ██╗██╗  ██╗
 #      ██║██║   ██║██╔════╝╚══██╔══╝██╔════╝    ██╔══██╗██╔══██╗██║╚██╗██╔╝
@@ -46,6 +47,13 @@ async def wait_message_juste_prix(message: discord.Message):
             await message.channel.send("c'est ça !")
             juste_prix = -1
 
+# ███╗   ███╗███████╗███╗   ███╗ ██████╗      ██╗██╗
+# ████╗ ████║██╔════╝████╗ ████║██╔═══██╗     ██║██║
+# ██╔████╔██║█████╗  ██╔████╔██║██║   ██║     ██║██║
+# ██║╚██╔╝██║██╔══╝  ██║╚██╔╝██║██║   ██║██   ██║██║
+# ██║ ╚═╝ ██║███████╗██║ ╚═╝ ██║╚██████╔╝╚█████╔╝██║
+# ╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝  ╚════╝ ╚═╝
+                                                  
 # ██████╗ ███████╗███╗   ██╗██████╗ ██╗   ██╗
 # ██╔══██╗██╔════╝████╗  ██║██╔══██╗██║   ██║
 # ██████╔╝█████╗  ██╔██╗ ██║██║  ██║██║   ██║
@@ -54,7 +62,7 @@ async def wait_message_juste_prix(message: discord.Message):
 # ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ 
 
 is_pendu = -1
-tentative = 7
+tentative = 11
 
 def replace_char(string: str, char: str, index: int):
     return string[:index] + char + string[index + 1:]
@@ -64,12 +72,10 @@ async def pendu(ctx: commands.Context):
     global pendu_word
     global is_pendu
     global words
-    tentative = 8
+    tentative = 11
     pendu_word = pendu_data.pendu_data[random.randint(0, len(pendu_data.pendu_data) - 1)]
     words="_"*len(pendu_word)
     words = pendu_word[0] + words[1:]
-    print(pendu_word)
-    print(words)
     is_pendu = 1
     for i in range(len(pendu_word)):
         if (words[0] == pendu_word[i]):
@@ -97,11 +103,11 @@ async def wait_message_pendu(message: discord.Message):
         await message.channel.send(f"`{words}      tentative restantes : {tentative} !`")
         if is_win == 0:
             await message.channel.send(f"`Bien jouer le mot était bien : {words}` ")
-            tentative = 8
+            tentative = 11
             is_pendu = -1
-        if tentative == 0:
-            await message.channel.send(f"`Perdu, le mot était : {words} !`")
-            tentative = 8
+        if tentative <= 0:
+            await message.channel.send(f"`Perdu, le mot était : {pendu_word} !`")
+            tentative = 11
             is_pendu = -1
 
 #  ██████╗ ██╗   ██╗██╗███████╗███████╗
@@ -157,5 +163,5 @@ async def ratio(ctx: commands.Context):
 # ██╔══██╗██║   ██║██║╚██╗██║    ██╔══██╗██║   ██║   ██║   
 # ██║  ██║╚██████╔╝██║ ╚████║    ██████╔╝╚██████╔╝   ██║   
 # ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝    ╚═════╝  ╚═════╝    ╚═╝   
-                                                         
+
 bot.run(secret.secret)
