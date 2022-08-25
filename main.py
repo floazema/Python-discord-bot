@@ -15,10 +15,46 @@ juste_prix = -1
 quiz = -1
 is_pendu = -1
 
+class Emojis:
+    def __init__(self):
+        self.orange_square = ":orange_square:"
+        self.green_square = ":green_square:"
+        self.black_large_square = ":black_large_square:"
+        self.blue_square = ":blue_square:"
+        self.letters = {
+            "A": ":regional_indicator_a:",
+            "B": ":regional_indicator_b:",
+            "C": ":regional_indicator_c:",
+            "D": ":regional_indicator_d:",
+            "E": ":regional_indicator_e:",
+            "F": ":regional_indicator_f:",
+            "G": ":regional_indicator_g:",
+            "H": ":regional_indicator_h:",
+            "I": ":regional_indicator_i:",
+            "J": ":regional_indicator_j:",
+            "K": ":regional_indicator_k:",
+            "L": ":regional_indicator_l:",
+            "M": ":regional_indicator_m:",
+            "N": ":regional_indicator_n:",
+            "O": ":regional_indicator_o:",
+            "P": ":regional_indicator_p:",
+            "Q": ":regional_indicator_q:",
+            "R": ":regional_indicator_r:",
+            "S": ":regional_indicator_s:",
+            "T": ":regional_indicator_t:",
+            "U": ":regional_indicator_u:",
+            "V": ":regional_indicator_v:",
+            "W": ":regional_indicator_w:",
+            "X": ":regional_indicator_x:",
+            "Y": ":regional_indicator_y:",
+            "Z": ":regional_indicator_z:",
+        }
+emoji = Emojis()
+
 @bot.event
 async def on_ready():
     print("JE SUIS PRET")
-     
+
 
 #      ██╗██╗   ██╗███████╗████████╗███████╗    ██████╗ ██████╗ ██╗██╗  ██╗
 #      ██║██║   ██║██╔════╝╚══██╔══╝██╔════╝    ██╔══██╗██╔══██╗██║╚██╗██╔╝
@@ -136,6 +172,77 @@ async def ratio(ctx: commands.Context):
         await last_msg.add_reaction("🇹")
         await last_msg.add_reaction("🇮")
         await last_msg.add_reaction("🇴")
+
+# ███╗   ███╗ ██████╗ ████████╗██╗   ██╗███████╗
+# ████╗ ████║██╔═══██╗╚══██╔══╝██║   ██║██╔════╝
+# ██╔████╔██║██║   ██║   ██║   ██║   ██║███████╗
+# ██║╚██╔╝██║██║   ██║   ██║   ██║   ██║╚════██║
+# ██║ ╚═╝ ██║╚██████╔╝   ██║   ╚██████╔╝███████║
+# ╚═╝     ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝
+
+motus_data = {"answer": "", "running": False, "history": [], "index": 0}
+
+def check_word_in_motus(word: str, answer: str):
+    output = ""
+
+    for i, letter in enumerate(word):
+        if letter == answer[i]:
+            output += emoji.green_square
+        elif letter in answer:
+            output += emoji.orange_square
+        else:
+            output += emoji.black_large_square
+    return output
+
+def write_word_emojis(word: str):
+    word_emojis = ""
+    for letter in word:
+        if (letter in emoji.letters):
+            word_emojis += emoji.letters[letter]
+        else:
+            word_emojis += emoji.black_large_square
+    return word_emojis
+
+def display_history(history: list):
+    history_emojis = ""
+    for word in history:
+        if (word == ""):
+            history_emojis += emoji.blue_square * len(motus_data["answer"])
+            history_emojis += "\n"
+            history_emojis += emoji.black_large_square * len(motus_data["answer"])
+            history_emojis += "\n"
+        else:
+            history_emojis += write_word_emojis(word)
+            history_emojis += "\n"
+            history_emojis += check_word_in_motus(word, motus_data["answer"])
+            history_emojis += "\n"
+    return history_emojis
+
+@bot.command()
+async def motus(ctx: commands.Context):
+    global motus_data
+    motus_data["history"] = ["" for i in range(6)]
+    motus_data["answer"] = (pendu_data.pendu_data[random.randint(0, len(pendu_data.pendu_data) - 1)]).upper()
+    print("Motus: " + motus_data["answer"])
+    motus_data["running"] = True
+    motus_data["index"] = 0
+    await ctx.send(display_history(motus_data["history"]))
+
+@bot.listen('on_message')
+async def wait_message_motus(message: discord.Message):
+    global motus_data
+    if (motus_data["running"] and message.author.id != 991271491809316865 and len(message.content) == len(motus_data["answer"])):
+        user_message = message.content.upper()
+        motus_data["history"][motus_data["index"]] = user_message
+        motus_data["index"] += 1
+        print(motus_data["history"])
+        await message.channel.send(display_history(motus_data["history"]))
+        if (motus_data["index"] == 6):
+            message.channel.send("Le mot était: " + motus_data["answer"])
+            motus_data["running"] = False
+            motus_data["answer"] = ""
+            motus_data["history"] = ["" for i in range(6)]
+            motus_data["index"] = 0
 
 # ██████╗ ██╗   ██╗███╗   ██╗    ██████╗  ██████╗ ████████╗
 # ██╔══██╗██║   ██║████╗  ██║    ██╔══██╗██╔═══██╗╚══██╔══╝
