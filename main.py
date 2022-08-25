@@ -5,9 +5,6 @@ import random
 import data as quizz_data
 import data as pendu_data
 
-def replace_char(string: str, char: str, index: int):
-    return string[:index] + char + string[index + 1:]
-
 intents=discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="+", intents=intents)
@@ -57,6 +54,10 @@ async def wait_message_juste_prix(message: discord.Message):
 # ██║     ███████╗██║ ╚████║██████╔╝╚██████╔╝
 # ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ 
 
+
+def replace_char(string: str, char: str, index: int):
+    return string[:index] + char + string[index + 1:]
+
 @bot.command()
 async def pendu(ctx: commands.Context):
     """Pendu :D"""
@@ -71,7 +72,7 @@ async def pendu(ctx: commands.Context):
     is_pendu = 1
     for i in range(len(pendu_word)):
         if (words[0] == pendu_word[i]):
-            words = pendu_word[i] + words[1:]
+            words = replace_char(words, pendu_word[i], i)
     await ctx.send(f"`{words}`")
 
 @bot.listen('on_message')
