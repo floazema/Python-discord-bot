@@ -2,11 +2,18 @@ import secret
 from discord.ext import commands
 import discord
 import random
-import quizz as quizz_data
+import data as quizz_data
+import data as pendu_data
 
-bot = commands.Bot(command_prefix='+')
+def replace_char(string: str, char: str, index: int):
+    return string[:index] + char + string[index + 1:]
+
+intents=discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix="+", intents=intents)
 juste_prix = -1
 quiz = -1
+is_pendu = -1
 
 @bot.event
 async def on_ready():
@@ -29,6 +36,22 @@ async def ratio(ctx: commands.Context):
         await last_msg.add_reaction("🇴")
 
 @bot.command()
+async def pendu(ctx: commands.Context):
+    """Pendu :D"""
+    global pendu_word
+    global is_pendu
+    global words
+    pendu_word = pendu_data.pendu_data[random.randint(0, len(pendu_data.pendu_data) - 1)]
+    words="_"*len(pendu_word)
+    words = pendu_word[0] + words[1:]
+    print(pendu_word)
+    print(words)
+    is_pendu = 1
+    for i in range(len(pendu_word)):
+        if (words[0] == pendu_word[i]):
+            words = pendu_word[i] + words[1:]
+    await ctx.send(f"`{words}`")
+@bot.command()
 async def alea(ctx: commands.Context, stop=""):
     """Pick a random number between 0 and 1000, i will tell to the next message if they are close to it.
     if you specify any argument after this command, it will stop the alea
@@ -45,21 +68,23 @@ async def quizz(ctx: commands.Context):
     global quiz
     quiz = random.randint(0, len(quizz_data.reponse) - 1)
     await ctx.send(quizz_data.question[quiz])
-
 @bot.listen('on_message')
 async def on_message_i_think(message: discord.Message):
     global juste_prix
     global quiz
-    if message.content.lower() == "-help":
-        await message.channel.send("command: +help")
-    if message.content.lower() == "-ratio":
-        await message.channel.send("command: +ratio")
-    if message.content.lower() == "-alea":
-        await message.channel.send("command: +alea")
-    if message.content.lower() == "-alea stop":
-        await message.channel.send("command: +alea")
-    if message.content.lower() == "-quizz":
-        await message.channel.send("command: +quizz")
+    global words
+    global pendu_word
+    global is_pendu
+    if (is_pendu != -1 and len(message.content) == 1):
+        a = 0
+        for i in range(len(pendu_word)):
+            if (message.content.lower() == pendu_word[i].lower()):
+                words = replace_char(words, pendu_word[i], i)
+            if (words[i] == "_"):
+                a = 1
+        await message.channel.send(f"`{words}`")
+        if a == 0:
+            await message.channel.send(f"`Bien jouer le mot était bien : {words}` !")
     if (juste_prix != -1):
         if int(message.content) < juste_prix:
             await message.channel.send("plus haut")
