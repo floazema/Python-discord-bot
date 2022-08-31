@@ -36,7 +36,45 @@ class Squares:
         self.red = ":red_square:"
         self.crossed_green = ":negative_squared_cross_mark:"
 
+class Chess:
+    def __init__(self):
+        class Black:
+            def __init__(self):
+                self.pawn = "👦🏿"
+                self.knight = "🐴"
+                self.bishop = "👨🏿‍🎤"
+                self.tower = "💂🏿‍♀️"
+                self.queen = "👸🏿"
+                self.king = "🤴🏿"
+                self.empty = ":black_large_square:"
+        class White:
+            def __init__(self):
+                self.pawn = "👦🏻"
+                self.knight = "🦄"
+                self.bishop = "👨🏻‍🎤"
+                self.tower = "💂🏻‍♀️"
+                self.queen = "👸🏻"
+                self.king = "🤴🏻"
+                self.empty = ":white_large_square:"
+        self.black = Black()
+        self.white = White()
+
+
+
+# MAIN CLASS
 class Emojis:
     def __init__(self):
         self.square = Squares()
         self.letters = letters
+        self.chess = Chess()
+
+
+# 🤴🏻🤴🏿
+# 👸🏻👸🏿
+# 👦🏻👦🏿
+# 💂🏻‍♀️💂🏿‍♀️
+# 👨🏻‍🎤👨🏿‍🎤
+# 🦄🐴 
+# ⬜️⬛️
+        
+

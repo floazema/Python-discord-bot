@@ -1,12 +1,18 @@
 from gc import callbacks
-import secret, sys, discord, random, asyncio, time
+import secret, sys, discord, random, asyncio, time, os
 from site import venv
 from turtle import update
 from discord.ext import commands
 from discord.ui import Button, View
+
+#DATA
 import data as quizz_data
 import data as pendu_data
 from emojis import Emojis
+
+#IMAGE
+from PIL import Image, ImageEnhance
+
 
 intents=discord.Intents.default()
 intents.message_content = True
@@ -18,6 +24,112 @@ async def on_ready():
     print("o==================================================================o")
     print("|                         JE SUIS PRET                             |")
     print("o==================================================================o")
+
+#  ██████╗██╗  ██╗███████╗███████╗███████╗
+# ██╔════╝██║  ██║██╔════╝██╔════╝██╔════╝
+# ██║     ███████║█████╗  ███████╗███████╗
+# ██║     ██╔══██║██╔══╝  ╚════██║╚════██║
+# ╚██████╗██║  ██║███████╗███████║███████║
+#  ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
+
+class Pieces:
+    def __init__(self, blacks, whites):
+        class Black:
+            def __init__(self, blacks):
+                self.pawn = blacks[0]
+                self.knight = blacks[1]
+                self.tower = blacks[2]
+                self.bishop = blacks[3]
+                self.queen = blacks[4]
+                self.king = blacks[5]
+                self.empty = None
+        class White:
+            def __init__(self, whites):
+                self.pawn = whites[0]
+                self.knight = whites[1]
+                self.tower = whites[2]
+                self.bishop = whites[3]
+                self.queen = whites[4]
+                self.king = whites[5]
+                self.empty = None
+        self.black = Black(blacks)
+        self.white = White(whites)
+
+blacks = [Image.open("assets/chess/16x16/BlackPieces_Simplified.png").convert("RGBA").crop((i * 16, 0, (i + 1) * 16, 16)) for i in range(6)]
+whites = [Image.open("assets/chess/16x16/WhitePieces_Simplified.png").convert("RGBA").crop((i * 16, 0, (i + 1) * 16, 16)) for i in range(6)]
+pieces = Pieces(blacks, whites)
+
+class Chess():
+    def __init__(self, players, ctx):
+        self.players = players
+        self.ctx = ctx
+        self.board = self.generate_board()
+
+    def generate_board(self):
+        board = []
+        for i in range(8):
+            row = []
+            for j in range(8):
+                if (i + j) % 2 == 0:
+                    row.append(pieces.black.empty)
+                else:
+                    row.append(pieces.white.empty)
+            board.append(row)
+        board[0] = [pieces.black.tower, pieces.black.knight, pieces.black.bishop, pieces.black.king, pieces.black.queen, pieces.black.bishop, pieces.black.knight, pieces.black.tower]
+        board[1] = [pieces.black.pawn for i in range(8)]
+        board[6] = [pieces.white.pawn for i in range(8)]
+        board[7] = [pieces.white.tower, pieces.white.knight, pieces.white.bishop, pieces.white.king, pieces.white.queen, pieces.white.bishop, pieces.white.knight, pieces.white.tower]
+        return board
+
+    def print_board(self, board_img):
+        board_img.paste(Image.open("assets/chess/boards/board_plain_04.png").convert("RGBA"), (0,0))
+        for i, img in enumerate(self.board):
+            for j, piece in enumerate(img):
+                if (piece != None):
+                    board_img.paste(piece, (j * 16 + 7, i * 16 + 7), piece)
+        return board_img
+
+@bot.command()
+async def chess(ctx: commands.Context):
+    help = False
+    players = []
+    try:
+        opt = ctx.message.content.split(" ")[1]
+        if (opt == "-help" or opt == "-h"):
+            help = True
+            await ctx.send("""
+```
++chess [option | mention] [mention]
+Options:
+    -help : Display this message
+    -history : Display the history of the game (not implemented)
+Mention:
+    The user who will play the game with you
+```
+            """)
+            print("[CHESS] help message sent")
+    except:
+        print("[CHESS] no option")
+    try:
+        players.append(ctx.author.id)
+        players.append(ctx.message.mentions[0].id)
+        print(players)
+    except:
+        if (not help):
+            await ctx.send("Vous devez mentionner un autre joueur")
+        return
+    
+    await ctx.send("NEW GAME: <@" + str(players[0]) + "> VS <@" + str(players[1]) + ">")
+    board_img = Image.new("RGBA", (142, 142))
+    board_img.paste(Image.open("assets/chess/boards/board_plain_04.png").convert("RGBA"), (0,0))
+    chess_game = Chess(players, ctx)
+    print(f"[CHESS] game created between [{players[0]} / {ctx.author.name}] and [{players[1]} / {ctx.message.mentions[0].name}]")
+    chess_game.print_board(board_img).resize((284, 284)).save(f"assets/chess/{players[0]}_{players[1]}.png")
+    await ctx.send(file = discord.File(open(f"assets/chess/{players[0]}_{players[1]}.png", "rb")))
+    os.remove(f"assets/chess/{players[0]}_{players[1]}.png")
+
+
+
 
 #      ██╗██╗   ██╗███████╗████████╗███████╗    ██████╗ ██████╗ ██╗██╗  ██╗
 #      ██║██║   ██║██╔════╝╚══██╔══╝██╔════╝    ██╔══██╗██╔══██╗██║╚██╗██╔╝
@@ -76,7 +188,7 @@ def check_word_in_motus(word: str, answer: str):
         elif letter in answer:
             output += emoji.square.orange
         else:
-            output += emoji.square.black
+            output += emoji.square.white
     return output
 
 def write_word_emojis(word: str):
@@ -372,7 +484,8 @@ async def snake(ctx: commands.Context):
             continue
         snake.lastupdate = time.time()
         if not snake.update():
-            break
+            await msg.edit(content=snake.draw() + "\nYou lost!")
+            return
         await msg.edit(content=snake.draw(), view = await draw_buttons())
 
     
