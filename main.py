@@ -32,32 +32,28 @@ async def on_ready():
 # ╚██████╗██║  ██║███████╗███████║███████║
 #  ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
 
-class Pieces:
-    def __init__(self, blacks, whites):
-        class Black:
-            def __init__(self, blacks):
-                self.pawn = blacks[0]
-                self.knight = blacks[1]
-                self.tower = blacks[2]
-                self.bishop = blacks[3]
-                self.queen = blacks[4]
-                self.king = blacks[5]
-                self.empty = None
-        class White:
-            def __init__(self, whites):
-                self.pawn = whites[0]
-                self.knight = whites[1]
-                self.tower = whites[2]
-                self.bishop = whites[3]
-                self.queen = whites[4]
-                self.king = whites[5]
-                self.empty = None
-        self.black = Black(blacks)
-        self.white = White(whites)
-
 blacks = [Image.open("assets/chess/16x16/BlackPieces_Simplified.png").convert("RGBA").crop((i * 16, 0, (i + 1) * 16, 16)) for i in range(6)]
 whites = [Image.open("assets/chess/16x16/WhitePieces_Simplified.png").convert("RGBA").crop((i * 16, 0, (i + 1) * 16, 16)) for i in range(6)]
-pieces = Pieces(blacks, whites)
+
+pieces = {
+    "BlackPawn"   : blacks[0],
+    "BlackKnight" : blacks[1],
+    "BlackTower"  : blacks[2],
+    "BlackBishop" : blacks[3],
+    "BlackQueen"  : blacks[4],
+    "BlackKing"   : blacks[5],
+    
+    "WhitePawn"   : whites[0],
+    "WhiteKnight" : whites[1],
+    "WhiteTower"  : whites[2],
+    "WhiteBishop" : whites[3],
+    "WhiteQueen"  : whites[4],
+    "WhiteKing"   : whites[5],
+
+    ""            : None
+}
+
+pieceskeys = list(pieces.keys())
 
 class Chess():
     def __init__(self, players, ctx):
@@ -71,22 +67,22 @@ class Chess():
             row = []
             for j in range(8):
                 if (i + j) % 2 == 0:
-                    row.append(pieces.black.empty)
+                    row.append("")
                 else:
-                    row.append(pieces.white.empty)
+                    row.append("")
             board.append(row)
-        board[0] = [pieces.black.tower, pieces.black.knight, pieces.black.bishop, pieces.black.king, pieces.black.queen, pieces.black.bishop, pieces.black.knight, pieces.black.tower]
-        board[1] = [pieces.black.pawn for i in range(8)]
-        board[6] = [pieces.white.pawn for i in range(8)]
-        board[7] = [pieces.white.tower, pieces.white.knight, pieces.white.bishop, pieces.white.king, pieces.white.queen, pieces.white.bishop, pieces.white.knight, pieces.white.tower]
+        board[0] = [pieceskeys[2], pieceskeys[1], pieceskeys[3], pieceskeys[5], pieceskeys[4], pieceskeys[3], pieceskeys[1], pieceskeys[2]]
+        board[1] = [pieceskeys[0] for i in range(8)]
+        board[6] = [pieceskeys[6] for i in range(8)]
+        board[7] = [pieceskeys[8], pieceskeys[7], pieceskeys[9], pieceskeys[11], pieceskeys[10], pieceskeys[9], pieceskeys[7], pieceskeys[8]]
         return board
 
     def print_board(self, board_img):
         board_img.paste(Image.open("assets/chess/boards/board_plain_04.png").convert("RGBA"), (0,0))
-        for i, img in enumerate(self.board):
-            for j, piece in enumerate(img):
-                if (piece != None):
-                    board_img.paste(piece, (j * 16 + 7, i * 16 + 7), piece)
+        for i, y in enumerate(self.board):
+            for j, x in enumerate(y):
+                if (pieces[x] != None):
+                    board_img.paste(pieces[x], (j * 16 + 7, i * 16 + 7), pieces[x])
         return board_img
 
 @bot.command()
