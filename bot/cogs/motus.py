@@ -79,6 +79,7 @@ class Motus(commands.Cog, name="MotusGame", description="Motus commands"):
     # ╚═╝     ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚══════╝
     @commands.command()
     async def motus(self, ctx: commands.Context):
+        """Play motus game"""
         self.motus_data["history"] = ["" for _ in range(6)]
         self.motus_data["answer"] = (
             dictionnary[random.randint(0, len(dictionnary) - 1)]

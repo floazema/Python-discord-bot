@@ -114,9 +114,8 @@ class ChessGame(commands.Cog, name="ChessGame", description="Chess Game"):
     # ╚██████╗██║  ██║███████╗███████║███████║
     #  ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝
 
-    @commands.command()
+    @commands.command(description=help_message, brief="Play chess game")
     async def chess(self, ctx: commands.Context):
-        f"""{help_message}"""
         help = False
         players = []
         try:

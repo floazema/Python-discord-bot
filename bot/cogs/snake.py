@@ -82,6 +82,7 @@ class SnakeGame(commands.Cog, name="SnakeGame", description="Snake Game!"):
     # ╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
     @commands.command()
     async def snake(self, ctx: commands.Context):
+        """Play snake game"""
         print("starting a new snake game: ", ctx.author.name)
         snake = Snake(ctx.author.id, ctx.message.id, ctx.channel.id)
 

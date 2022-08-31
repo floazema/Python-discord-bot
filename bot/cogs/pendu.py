@@ -27,6 +27,7 @@ class Pendu(commands.Cog, name="PenduGame", description="Pendu Game"):
     # ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝  ╚═════╝
     @commands.command()
     async def pendu(self, ctx: commands.Context):
+        """Play pendu game"""
         self.tentative = 11
         self.pendu_word = str(
             dictionnary[random.randint(0, len(dictionnary) - 1)]
