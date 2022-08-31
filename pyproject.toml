@@ -1,0 +1,40 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "floazema", email = ""},
+    {name = "AntoninLaudon", email = ""},
+    {name = "cquentin", email = ""},
+    {name = "saverio976", email = ""},
+]
+dependencies = [
+    "discord.py @ git+https://github.com/Rapptz/discord.py",
+    "python-dotenv>=0.20.0",
+    "Pillow>=9.2.0",
+]
+requires-python = ">=3.9"
+license = {text = "MIT"}
+[project.optional-dependencies]
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+[tool]
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=22.6.0",
+    "flake8>=5.0.4",
+    "isort>=5.10.1",
+    "bandit>=1.7.4",
+    "pre-commit>=2.20.0",
+    "gitlint>=0.17.0",
+]
+
+[tool.bandit]
+skips = ["B311"]
+
+[tool.black]
+line-length = 79

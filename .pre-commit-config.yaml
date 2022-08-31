@@ -1,0 +1,55 @@
+# See https://pre-commit.com/ for usage and config
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: 'v4.3.0'
+  hooks:
+  - id: check-executables-have-shebangs
+  - id: check-json
+  - id: check-merge-conflict
+  - id: check-toml
+  - id: trailing-whitespace
+
+- repo: local
+  hooks:
+  - id: shellcheck-py
+    name: shellcheck-py
+    stages: [commit]
+    language: system
+    entry: shellcheck
+    types: [shell, bash, sh]
+
+  - id: isort
+    name: isort
+    stages: [commit]
+    language: system
+    entry: pdm run isort
+    types: [python]
+
+  - id: black
+    name: black
+    stages: [commit]
+    language: system
+    entry: pdm run black
+    types: [python]
+
+  - id: flake8
+    name: flake8
+    stages: [commit]
+    language: system
+    entry: pdm run flake8
+    types: [python]
+    exclude: setup.py
+
+  - id: bandit
+    name: bandit
+    stages: [commit]
+    language: system
+    entry: pdm run bandit -c pyproject.toml
+    types: [python]
+
+  - id: gitlint
+    name: gitlint
+    stages: [commit-msg]
+    language: system
+    entry: pdm run gitlint
+    args: [--ignore=B6, --msg-filename]

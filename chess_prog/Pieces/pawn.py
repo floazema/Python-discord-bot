@@ -1,11 +1,12 @@
 from Pieces.piece import Piece, Position
 
+
 class Pawn(Piece):
     def __init__(self, is_white, x, y):
         super().__init__(is_white, x, y)
         self.start_pos = True
         self.icon = ":regional_indicator_p:"
-    
+
     def move(self, x, y, all_piece):
         y -= self.pos.y
         x -= self.pos.x
