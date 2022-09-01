@@ -2,6 +2,8 @@
 
 ## install requirements
 
+**you need to have python -v >= 3.9**
+
 exec one of this
 
 - no devs
@@ -33,4 +35,11 @@ pdm run pre-commit install -t commit-msg
 # this will run python in the virtualenv
 # and python will run ./bot/__main__.py
 pdm run python bot
+```
+
+- if you are lazy to add pdm in front of python each time
+
+run:
+```bash
+source .venv/bin/activate # bash /zsh ... (but not powershell bouh bad bouh)
 ```
