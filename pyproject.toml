@@ -12,6 +12,8 @@ dependencies = [
     "discord.py @ git+https://github.com/Rapptz/discord.py",
     "python-dotenv>=0.20.0",
     "Pillow>=9.2.0",
+    "youtube-dl>=2021.12.17",
+    "PyNaCl>=1.5.0",
 ]
 requires-python = ">=3.9"
 license = {text = "MIT"}
