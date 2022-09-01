@@ -386,6 +386,15 @@ class Music(commands.Cog, name="Music", description="Music commands"):
             await ctx.send(embed=emb)
             await asyncio.sleep(1)
 
+    @commands.command()
+    async def stop_music(self, ctx: commands.Context):
+        """Stop and leave the vocal"""
+        client = await self.get_client(ctx.message, self.bot)
+        if await client.is_playing():
+            await client.pause()
+        client.playlist.clear()
+        await client.stop()
+
     async def musique(self):
         if self.ctx1 is None:
             return
