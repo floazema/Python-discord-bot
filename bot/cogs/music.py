@@ -62,8 +62,9 @@ class YTDLSource(discord.PCMVolumeTransformer):
 class Song:
     def __init__(self) -> None:
         self.url = ""
-        self.download_url = ""
         self.title = ""
+        self.duration = ""
+        self.thumbnail = ""
 
     @classmethod
     async def create(
@@ -89,7 +90,7 @@ class Song:
             if url_or_search.startswith("http"):
                 command += f" {url_or_search}"
             else:
-                command += f"ytsearch{'' if num == 0 else num+1}:"
+                command += f" ytsearch{'' if num == 0 else num+1}:"
                 command += f'"{url_or_search}"'
             command += " -e --get-thumbnail --get-duration -j --no-playlist"
             info = subprocess.run(  # nosec
@@ -97,7 +98,6 @@ class Song:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
-                shell=True,
             ).stdout.split("\n")
             return info
 
@@ -114,18 +114,10 @@ class Song:
                 compteur_quote_mark += 1
         webpage_url = webpage_url.split()
         webpage_url = webpage_url[1].strip('"')
-        # title , link, thumbnail, webpage_url
-        info_m = [
-            info[len(info) - 5],
-            info[len(info) - 4],
-            info[len(info) - 3],
-            webpage_url,
-            info[len(info) - 1],
-        ]
-        self.title = info_m[0]
-        self.url = info_m[3]
-        self.download_url = info_m[1]
-        print(info_m)
+        self.title = info[len(info) - 5]
+        self.thumbnail = info[len(info) - 4]
+        self.duration = info[len(info) - 3]
+        self.url = webpage_url
         return self
 
     @classmethod
@@ -149,7 +141,6 @@ class Song:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
-                shell=True,
             ).stdout
 
         loop = loop or asyncio.get_event_loop()
@@ -182,7 +173,6 @@ class Song:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
-                shell=True,
             ).stdout.split("\n")
             return l_info
 
@@ -227,7 +217,6 @@ class Song:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 universal_newlines=True,
-                shell=True,
             ).stdout.split("\n")
             index_webpage_url = info[len(info) - 2].index("webpage_url")
             compteur_quote_mark = 0
@@ -347,23 +336,60 @@ class Music(commands.Cog, name="Music", description="Music commands"):
 
     @commands.command()
     async def play(self, ctx: commands.Context, *, url_or_search: str):
+        """Play a music by keywords/link"""
         client = await self.get_client(ctx.message, self.bot)
         await client.add(url_or_search)
         if len(client.playlist) == 0:
             await ctx.send("The url/search found nothing")
             return
-        await ctx.send(f"{client.playlist[-1].url}")
+        await ctx.send(f"Added: `{client.playlist[-1].title}`")
         self.ctx1 = ctx
         self.compt_muse += 1
         if self.compt_muse == 1:
-            print("her 1")
             await self.musique()
+
+    @commands.command()
+    async def now(self, ctx: commands.Context):
+        """Show curently music played"""
+        if self.muse is None:
+            await ctx.send("No music")
+            return
+        emb = discord.Embed(
+            title=f"{self.muse.title}",
+            description=f"duration: {self.muse.duration}",
+            color=0xD92626,
+            url=f"{self.muse.url}",
+        )
+        emb.set_thumbnail(url=self.muse.thumbnail)
+        await ctx.send(embed=emb)
+
+    @commands.command()
+    async def skip(self, ctx: commands.Context):
+        """Pass to next music in playlist"""
+        client = await self.get_client(ctx.message, self.bot)
+        await client.stop()
+
+    @commands.command()
+    async def queue(self, ctx: commands.Context):
+        """Show music in playlist"""
+        client = await self.get_client(ctx.message, self.bot)
+        alll = [] if self.muse is None else [self.muse]
+        alll.extend(client.playlist)
+        for i, song in enumerate(alll):
+            emb = emb = discord.Embed(
+                title=f"{i} : {song.title}",
+                description=f"duration: {song.duration}",
+                color=0xD92626,
+                url=f"{song.url}",
+            )
+            emb.set_thumbnail(url=song.thumbnail)
+            await ctx.send(embed=emb)
+            await asyncio.sleep(1)
 
     async def musique(self):
         if self.ctx1 is None:
             return
         music_client = await self.get_client(self.ctx1.message, self.bot)
-        print("here")
         while len(music_client.playlist) > 0:
             self.muse = music_client.playlist[0]
             del music_client.playlist[0]
@@ -372,6 +398,10 @@ class Music(commands.Cog, name="Music", description="Music commands"):
             if is_ok:
                 embed = discord.Embed(
                     title=self.muse.title, url=self.muse.url, color=0xAB3636
+                )
+                embed.set_thumbnail(url=self.muse.thumbnail)
+                embed.add_field(
+                    name="Now Playing!", value=f"time: {self.muse.duration}"
                 )
                 await self.ctx1.send(embed=embed)
             else:
