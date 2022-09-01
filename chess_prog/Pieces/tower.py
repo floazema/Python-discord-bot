@@ -2,12 +2,12 @@ from Pieces.piece import Piece, Position
 
 
 class Tower(Piece):
-    def __init__(self, is_white, x, y):
+    def __init__(self, is_white: bool, x: int, y: int):
         super().__init__(is_white, x, y)
         self.start_pos = True
         self.icon = ":regional_indicator_r:"
 
-    def move(self, x, y, all_pieces):
+    def move(self, x: int, y: int, all_pieces: list) -> bool:
         if x < 1 or x > 8 or y < 1 or y > 8:
             return False
         elif x == self.pos.x and y == self.pos.y:
