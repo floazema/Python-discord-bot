@@ -27,7 +27,7 @@ class Pawn(Piece):
                 return False
         else:
             for i in all_piece:
-                if i.pos.same_pos(i, Position(self.pos.x, self.pos.y + y)):
+                if i.pos.same_pos(Position(self.pos.x, self.pos.y + y)):
                     return False
             if y == 1:
                 self.pos.y += 1
@@ -40,3 +40,14 @@ class Pawn(Piece):
                 return False
         self.start_pos = False
         return True
+
+    def eat(self, x: int, y: int, all_piece: list):
+        if (self.white and y - self.pos.y != -1) or (not self.white and y - self.pos.y != 1):
+            return False
+        if x - self.pos.x == 1 or x - self.pos.x == -1:
+            for i in all_piece:
+                if i.pos.same_pos(Position(x, y)):
+                    all_piece.remove(i)
+                    self.pos = Position(x, y)
+                    return True
+            return False
