@@ -13,28 +13,28 @@ class Pawn(Piece):
         if x:
             return False
         if self.white:
-            for i in all_piece:
-                if i.pos.same_pos(Position(self.pos.x, self.pos.y + y)):
-                    return False
+            if not Position(self.pos.x, self.pos.y + y).is_empty(all_piece):
+                return False
             if y == -1:
                 self.pos.y -= 1
             elif y == -2:
-                for i in all_piece:
-                    if i.pos.same_pos(Position(self.pos.x, self.pos.y - 1)):
-                        return False
+                if not Position(self.pos.x, self.pos.y - 1).is_empty(
+                    all_piece
+                ):
+                    return False
                 self.pos.y -= 2
             else:
                 return False
         else:
-            for i in all_piece:
-                if i.pos.same_pos(Position(self.pos.x, self.pos.y + y)):
-                    return False
+            if not Position(self.pos.x, self.pos.y + y).is_empty(all_piece):
+                return False
             if y == 1:
                 self.pos.y += 1
             elif y == 2:
-                for i in all_piece:
-                    if i.pos.same_pos(Position(self.pos.x, self.pos.y + 1)):
-                        return False
+                if not Position(self.pos.x, self.pos.y + 1).is_empty(
+                    all_piece
+                ):
+                    return False
                 self.pos.y += 2
             else:
                 return False
