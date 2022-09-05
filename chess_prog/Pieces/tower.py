@@ -36,24 +36,28 @@ class Tower(Piece):
         else:
             return False
         return True
-    
+
     def eat(self, x: int, y: int, all_pieces: list) -> bool:
         if x == self.pos.x and y == self.pos.y:
             return False
         elif x == self.pos.x and y != self.pos.y:
             for i in range(min(y, self.pos.y), max(y, self.pos.y) - 1):
                 for j in all_pieces:
-                    if j.pos.same_pos(Position(x, i)) and not j.pos.same_pos(
-                        self.pos
-                    ) and not j.pos.same_pos(Position(x, y)):
+                    if (
+                        j.pos.same_pos(Position(x, i))
+                        and not j.pos.same_pos(self.pos)
+                        and not j.pos.same_pos(Position(x, y))
+                    ):
                         return False
             self.pos = Position(x, y)
         elif x != self.pos.x and y == self.pos.y:
             for i in range(min(x, self.pos.x), max(x, self.pos.x) + 1):
                 for j in all_pieces:
-                    if j.pos.same_pos(Position(i, y)) and not j.pos.same_pos(
-                        self.pos
-                    ) and not j.pos.same_pos(Position(x, y)):
+                    if (
+                        j.pos.same_pos(Position(i, y))
+                        and not j.pos.same_pos(self.pos)
+                        and not j.pos.same_pos(Position(x, y))
+                    ):
                         return False
             self.pos = Position(x, y)
         else:

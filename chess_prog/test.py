@@ -1,6 +1,6 @@
 from Pieces.pawn import Pawn
-from Pieces.tower import Tower
 from Pieces.piece import Position
+from Pieces.tower import Tower
 
 
 def create_board():
@@ -25,7 +25,16 @@ def get_movement(cmd, all_piece, color):
     elif cmd == "0-0-0":
         pass
     else:
-        if len(cmd) != 5 or sum([(i[0] in "abcdefgh" and i[1] in "12345678") for i in cmd.split("-")]) != 2:
+        if (
+            len(cmd) != 5
+            or sum(
+                [
+                    (i[0] in "abcdefgh" and i[1] in "12345678")
+                    for i in cmd.split("-")
+                ]
+            )
+            != 2
+        ):
             return False
         if cmd[0:2] == cmd[3:5]:
             return False
@@ -40,9 +49,11 @@ def get_movement(cmd, all_piece, color):
                 return False
             for i in all_piece:
                 if i.pos.same_pos(arrival_pos) and i.white != color:
-                    return piece_to_move.eat(arrival_pos.x, arrival_pos.y, all_piece)
+                    return piece_to_move.eat(
+                        arrival_pos.x, arrival_pos.y, all_piece
+                    )
             return piece_to_move.move(arrival_pos.x, arrival_pos.y, all_piece)
-            
+
 
 a = create_board()
 rd = True
