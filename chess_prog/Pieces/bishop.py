@@ -14,10 +14,10 @@ class Bishop(Piece):
         if abs(self.pos.x - x) != abs(self.pos.y - y):
             return False
         while not self.pos.same_pos(Position(temp_x, temp_y)):
-            if Position(temp_x, temp_y).is_empty(all_pieces):
+            if Position(temp_x, temp_y).is_empty(all_piece):
                 return False
-            temp_x += 1 if temps_x < x else -1
-            temp_y += 1 if temps_y < y else -1
+            temp_x += 1 if temp_x < x else -1
+            temp_y += 1 if temp_y < y else -1
         self.pos.x = x
         self.pos.y = y
         return True

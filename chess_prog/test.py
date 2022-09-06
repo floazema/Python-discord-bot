@@ -57,7 +57,7 @@ def get_movement(cmd, all_piece, color):
                     return piece_to_move.eat(
                         arrival_pos.x, arrival_pos.y, all_piece
                     )
-            print('p')
+            print("p")
             return piece_to_move.move(arrival_pos.x, arrival_pos.y, all_piece)
 
 
