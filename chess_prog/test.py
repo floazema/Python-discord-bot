@@ -1,3 +1,4 @@
+from Pieces.bishop import Bishop
 from Pieces.pawn import Pawn
 from Pieces.piece import Position
 from Pieces.tower import Tower
@@ -12,6 +13,10 @@ def create_board():
     all_pieces.append(Tower(True, 8, 8))
     all_pieces.append(Tower(False, 8, 1))
     all_pieces.append(Tower(False, 1, 1))
+    all_pieces.append(Bishop(True, 3, 8))
+    all_pieces.append(Bishop(True, 6, 8))
+    all_pieces.append(Bishop(False, 3, 1))
+    all_pieces.append(Bishop(False, 6, 1))
     return all_pieces
 
 
@@ -52,6 +57,7 @@ def get_movement(cmd, all_piece, color):
                     return piece_to_move.eat(
                         arrival_pos.x, arrival_pos.y, all_piece
                     )
+            print('p')
             return piece_to_move.move(arrival_pos.x, arrival_pos.y, all_piece)
 
 
