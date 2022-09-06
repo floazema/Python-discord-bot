@@ -1,4 +1,5 @@
 from Pieces.bishop import Bishop
+from Pieces.king import King
 from Pieces.knight import Knight
 from Pieces.pawn import Pawn
 from Pieces.piece import Position
@@ -22,6 +23,8 @@ def create_board():
     all_pieces.append(Knight(True, 7, 8))
     all_pieces.append(Knight(False, 2, 1))
     all_pieces.append(Knight(False, 7, 1))
+    all_pieces.append(King(True, 5, 8))
+    all_pieces.append(King(False, 5, 1))
     return all_pieces
 
 
