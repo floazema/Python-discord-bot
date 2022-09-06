@@ -14,7 +14,7 @@ class Position:
     
     def is_empty(self, all_pieces: list):
         for i in all_pieces:
-            if self.same_pos(i):
+            if self.same_pos(i.pos):
                 return False
         return True
 
