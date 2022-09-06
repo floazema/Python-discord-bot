@@ -23,9 +23,12 @@ class Bishop(Piece):
         return True
 
     def eat(self, x: int, y: int, all_piece: list):
+        temp = None
         for i in all_piece:
-            if i.pos.same_pos(Position(x, y)):
+            if i.pos.same_pos(Position(x, y)) and self.white != i.white:
                 temp = i
+        if not temp:
+            return False
         return_value = self.move(x, y, all_piece)
         if return_value:
             all_piece.remove(temp)
