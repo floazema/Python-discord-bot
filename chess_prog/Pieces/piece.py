@@ -23,3 +23,19 @@ class Piece:
     def __init__(self, isWhite: bool, x: int, y: int):
         self.white = isWhite
         self.pos = Position(x, y)
+
+    def move(self, x: int, y: int, all_piece: list):
+        raise NotImplementedError("nit impl")
+
+    def eat(self, x: int, y: int, all_piece: list):
+        temp = None
+        for i in all_piece:
+            if Position(x, y).same_pos(i.pos) and self.white != i.white:
+                print("miam miam")
+                temp = i
+        if not temp:
+            return False
+        if self.move(x, y, all_piece):
+            all_piece.remove(temp)
+            return True
+        return False

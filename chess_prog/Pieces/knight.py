@@ -1,4 +1,4 @@
-from Pieces.pawn import Piece, Position
+from Pieces.pawn import Piece
 
 
 class Knight(Piece):
@@ -12,17 +12,5 @@ class Knight(Piece):
         if abs(x) == 2 and abs(y) == 1 or abs(x) == 1 and abs(y) == 2:
             self.pos.x += x
             self.pos.y += y
-            return True
-        return False
-
-    def eat(self, x: int, y: int, all_piece: list):
-        temp = None
-        for i in all_piece:
-            if Position(x, y).same_pos(i.pos) and self.white != i.white:
-                temp = i
-        if not temp:
-            return False
-        if self.move(x, y, all_piece):
-            all_piece.remove(temp)
             return True
         return False

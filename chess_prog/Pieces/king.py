@@ -1,4 +1,4 @@
-from Pieces.piece import Piece, Position
+from Pieces.piece import Piece
 
 
 class King(Piece):
@@ -14,15 +14,3 @@ class King(Piece):
         self.pos.x += x
         self.pos.y += y
         return True
-
-    def eat(self, x: int, y: int, all_piece: list):
-        temp = None
-        for i in all_piece:
-            if Position(x, y).same_pos(i.pos) and self.white != i.white:
-                temp = i
-        if not temp:
-            return False
-        if self.move(x, y, all_piece):
-            all_piece.remove(temp)
-            return True
-        return False
