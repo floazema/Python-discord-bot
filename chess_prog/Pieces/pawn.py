@@ -7,41 +7,27 @@ class Pawn(Piece):
         self.start_pos = True
         self.icon = ":regional_indicator_p:"
 
-    def move(self, x: int, y: int, all_piece: list) -> bool:
+    def move(self, x: int, y: int, all_piece: list["Piece"]) -> bool:
         y -= self.pos.y
         x -= self.pos.x
         if x:
             return False
-        if self.white:
-            if not Position(self.pos.x, self.pos.y + y).is_empty(all_piece):
+        multip = -1 if self.white else 1
+        if not Position(self.pos.x, self.pos.y + y).is_empty(all_piece):
+            return False
+        if y == 1 * multip:
+            self.pos.y += 1 * multip
+        elif y == 2 * multip:
+            if not Position(self.pos.x, self.pos.y + (1 * multip)).is_empty(
+                all_piece
+            ):
                 return False
-            if y == -1:
-                self.pos.y -= 1
-            elif y == -2:
-                if not Position(self.pos.x, self.pos.y - 1).is_empty(
-                    all_piece
-                ):
-                    return False
-                self.pos.y -= 2
-            else:
-                return False
+            self.pos.y += 2 * multip
         else:
-            if not Position(self.pos.x, self.pos.y + y).is_empty(all_piece):
-                return False
-            if y == 1:
-                self.pos.y += 1
-            elif y == 2:
-                if not Position(self.pos.x, self.pos.y + 1).is_empty(
-                    all_piece
-                ):
-                    return False
-                self.pos.y += 2
-            else:
-                return False
-        self.start_pos = False
+            return False
         return True
 
-    def eat(self, x: int, y: int, all_piece: list):
+    def eat(self, x: int, y: int, all_piece: list["Piece"]):
         if (self.white and y - self.pos.y != -1) or (
             not self.white and y - self.pos.y != 1
         ):

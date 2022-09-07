@@ -6,7 +6,7 @@ class Knight(Piece):
         super().__init__(isWhite, x, y)
         self.icon = ":regional_indicator_n:"
 
-    def move(self, x: int, y: int, all_piece: list):
+    def move(self, x: int, y: int, all_piece: list["Piece"]) -> bool:
         x -= self.pos.x
         y -= self.pos.y
         if abs(x) == 2 and abs(y) == 1 or abs(x) == 1 and abs(y) == 2:

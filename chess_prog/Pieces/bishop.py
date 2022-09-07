@@ -6,7 +6,7 @@ class Bishop(Piece):
         super().__init__(isWhite, x, y)
         self.icon = ":regional_indicator_b:"
 
-    def move(self, x: int, y: int, all_piece: list) -> bool:
+    def move(self, x: int, y: int, all_piece: list["Piece"]) -> bool:
         temp_x = self.pos.x
         temp_y = self.pos.y
         if x == self.pos.x and y == self.pos.y:
