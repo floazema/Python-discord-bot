@@ -3,6 +3,7 @@ from Pieces.king import King
 from Pieces.knight import Knight
 from Pieces.pawn import Pawn
 from Pieces.piece import Position
+from Pieces.queen import Queen
 from Pieces.tower import Tower
 
 
@@ -25,6 +26,8 @@ def create_board():
     all_pieces.append(Knight(False, 7, 1))
     all_pieces.append(King(True, 5, 8))
     all_pieces.append(King(False, 5, 1))
+    all_pieces.append(Queen(True, 4, 8))
+    all_pieces.append(Queen(False, 4, 1))
     return all_pieces
 
 
@@ -61,11 +64,10 @@ def get_movement(cmd, all_piece, color):
             if not piece_to_move:
                 return False
             for i in all_piece:
-                if i.pos.same_pos(arrival_pos) and i.white != color:
+                if i.pos.same_pos(arrival_pos):
                     return piece_to_move.eat(
                         arrival_pos.x, arrival_pos.y, all_piece
                     )
-            print("p")
             return piece_to_move.move(arrival_pos.x, arrival_pos.y, all_piece)
 
 
@@ -83,6 +85,4 @@ while True:
             board[i.pos.y - 1][i.pos.x - 1] = i.icon[-2].upper()
     for i in board:
         print(i)
-    a[0].pos.display()
-    print(a[0].pos.y)
     rd = False if rd else True
