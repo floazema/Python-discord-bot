@@ -2,7 +2,7 @@ from Pieces.piece import Piece, Position
 
 
 class Queen(Piece):
-    def __init__(self, isWhite, x, y):
+    def __init__(self, isWhite: bool, x: int, y: int):
         super().__init__(isWhite, x, y)
         self.icon = ":regional_indicator_q:"
 

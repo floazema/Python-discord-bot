@@ -17,7 +17,7 @@ class Pawn(Piece):
             return False
         if y == 1 * multip:
             self.pos.y += 1 * multip
-        elif y == 2 * multip:
+        elif y == 2 * multip and self.start_pos:
             if not Position(self.pos.x, self.pos.y + (1 * multip)).is_empty(
                 all_piece
             ):
@@ -25,6 +25,7 @@ class Pawn(Piece):
             self.pos.y += 2 * multip
         else:
             return False
+        self.start_pos = False
         return True
 
     def eat(self, x: int, y: int, all_piece: list["Piece"]):
