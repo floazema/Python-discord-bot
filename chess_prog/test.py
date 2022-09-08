@@ -1,4 +1,9 @@
+from Pieces.bishop import Bishop
+from Pieces.king import King
+from Pieces.knight import Knight
 from Pieces.pawn import Pawn
+from Pieces.piece import Position
+from Pieces.queen import Queen
 from Pieces.tower import Tower
 
 
@@ -11,34 +16,59 @@ def create_board():
     all_pieces.append(Tower(True, 8, 8))
     all_pieces.append(Tower(False, 8, 1))
     all_pieces.append(Tower(False, 1, 1))
+    all_pieces.append(Bishop(True, 3, 8))
+    all_pieces.append(Bishop(True, 6, 8))
+    all_pieces.append(Bishop(False, 3, 1))
+    all_pieces.append(Bishop(False, 6, 1))
+    all_pieces.append(Knight(True, 2, 8))
+    all_pieces.append(Knight(True, 7, 8))
+    all_pieces.append(Knight(False, 2, 1))
+    all_pieces.append(Knight(False, 7, 1))
+    all_pieces.append(King(True, 5, 8))
+    all_pieces.append(King(False, 5, 1))
+    all_pieces.append(Queen(True, 4, 8))
+    all_pieces.append(Queen(False, 4, 1))
     return all_pieces
 
 
-def move_the_good_piece(x, y, piece, all_piece, rd):
-    if piece.upper() == "R":
-        for i in all_piece:
-            if (
-                (x == i.pos.x or y == i.pos.y)
-                and i.icon[-2] == "r"
-                and rd == i.white
-            ):
-                return i.move(x, y, a)
-    if piece.upper() == "":
-        for i in all_piece:
-            if (x == i.pos.x) and i.icon[-2] == "p" and rd == i.white:
-                print(i.pos.x, i.pos.y)
-                return i.move(x, y, a)
-    return False
+def convert_algebric_in_pos(pos: str):
+    return Position(ord(pos[0]) - 96, 9 - int(pos[1]))
 
 
-def transform_cmd_in_move(cmd, all_piece, rd):
-    if len(cmd) == 2:
-        if cmd[0] in "abcdefgh" and cmd[1] in "12345678":
-            return move_the_good_piece(
-                ord(cmd[0]) - 96, 9 - int(cmd[1]), "", all_piece, rd
+def get_movement(cmd, all_piece, color):
+    if cmd == "0-0":
+        pass
+    elif cmd == "0-0-0":
+        pass
+    else:
+        if (
+            len(cmd) != 5
+            or sum(
+                [
+                    (i[0] in "abcdefgh" and i[1] in "12345678")
+                    for i in cmd.split("-")
+                ]
             )
-        else:
+            != 2
+        ):
             return False
+        if cmd[0:2] == cmd[3:5]:
+            return False
+        else:
+            start_pos = convert_algebric_in_pos(cmd[0:2])
+            arrival_pos = convert_algebric_in_pos(cmd[3:5])
+            piece_to_move = None
+            for i in all_piece:
+                if i.pos.same_pos(start_pos) and i.white == color:
+                    piece_to_move = i
+            if not piece_to_move:
+                return False
+            for i in all_piece:
+                if i.pos.same_pos(arrival_pos):
+                    return piece_to_move.eat(
+                        arrival_pos.x, arrival_pos.y, all_piece
+                    )
+            return piece_to_move.move(arrival_pos.x, arrival_pos.y, all_piece)
 
 
 a = create_board()
@@ -46,7 +76,7 @@ rd = True
 while True:
     board = [[" " for _ in range(8)] for _ in range(8)]
     while True:
-        if transform_cmd_in_move(input(), a, rd) is True:
+        if get_movement(input(), a, rd) is True:
             break
     for i in a:
         if i.white:
